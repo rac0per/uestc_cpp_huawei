@@ -4,7 +4,7 @@ namespace adas
 PoseHandler::PoseHandler(const Pose& pose) noexcept : pose(pose)
 {
 }
-void PoseHandler::Move() noexcept
+void PoseHandler::Forward() noexcept
 {
     if (pose.heading == 'E') {
         ++pose.x;
@@ -14,6 +14,18 @@ void PoseHandler::Move() noexcept
         ++pose.y;
     } else if (pose.heading == 'S') {
         --pose.y;
+    }
+}
+void PoseHandler::Backward() noexcept
+{
+    if (pose.heading == 'E') {
+        --pose.x;
+    } else if (pose.heading == 'W') {
+        ++pose.x;
+    } else if (pose.heading == 'N') {
+        --pose.y;
+    } else if (pose.heading == 'S') {
+        ++pose.y;
     }
 }
 void PoseHandler::TurnLeft() noexcept
@@ -51,5 +63,13 @@ void PoseHandler::Fast() noexcept
 bool PoseHandler::IsFast() const noexcept
 {
     return fast;
+}
+void PoseHandler::Reverse() noexcept
+{
+    reverse = !reverse;
+}
+bool PoseHandler::IsReverse() const noexcept
+{
+    return reverse;
 }
 }
