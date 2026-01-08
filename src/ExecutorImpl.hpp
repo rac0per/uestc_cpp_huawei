@@ -6,7 +6,7 @@ namespace adas
 class ExecutorImpl final : public Executor
 {
 public:
-    explicit ExecutorImpl(const Pose& pose) noexcept;
+    explicit ExecutorImpl(const Pose& pose, VehicleType type = VehicleType::Normal) noexcept;
     ~ExecutorImpl() noexcept = default;
     ExecutorImpl(const ExecutorImpl&) = delete;
     ExecutorImpl& operator=(const ExecutorImpl&) = delete;
@@ -25,6 +25,7 @@ public:
     void Reverse(void) noexcept;
 
 private:
+    VehicleType vehicleType;
     Pose pose;
     bool fast{false};
     bool reverse{false};

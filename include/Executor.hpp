@@ -2,6 +2,12 @@
 #include <string>
 namespace adas
 {
+enum class VehicleType {
+    Normal,  // 普通车
+    Sport,   // 跑车
+    Bus      // 公交车
+};
+
 struct Pose {
     int x;
     int y;
@@ -11,7 +17,7 @@ class Executor
 {
 public:
     // Caller should delete *executor when it is no longer needed.
-    static Executor* NewExecutor(const Pose& pose = {0, 0, 'N'}) noexcept;
+    static Executor* NewExecutor(const Pose& pose = {0, 0, 'N'}, VehicleType type = VehicleType::Normal) noexcept;
 
 public:
     Executor(void) = default;

@@ -1,24 +1,25 @@
 #include "ExecutorImpl.hpp"
 
+#include <algorithm>
 #include <memory>
 #include <unordered_map>
-#include <algorithm>
+
 #include "CmderFactory.hpp"
-#include "Singleton.hpp"
 #include "Command.hpp"
+#include "Singleton.hpp"
 namespace adas
 {
-Executor* Executor::NewExecutor(const Pose& pose) noexcept
+Executor* Executor::NewExecutor(const Pose& pose, VehicleType type) noexcept
 {
-    return new (std::nothrow) ExecutorImpl(pose);
+    return new (std::nothrow) ExecutorImpl(pose, type);
 }
-ExecutorImpl::ExecutorImpl(const Pose& pose) noexcept : poseHandler(pose)
+ExecutorImpl::ExecutorImpl(const Pose& pose, VehicleType type) noexcept : vehicleType(type), poseHandler(pose)
 {
 }
 
 void ExecutorImpl::Execute(const std::string& commands) noexcept
 {
-    const auto cmders = Singleton<CmderFactory>::Instance().GetCmders(commands);
+    const auto cmders = Singleton<CmderFactory>::Instance().GetCmders(commands, vehicleType);
     std::for_each(cmders.begin(), cmders.end(),
                   [this](const std::function<void(PoseHandler & poseHandler)>& cmder) noexcept { cmder(poseHandler); });
 }
