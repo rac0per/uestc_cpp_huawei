@@ -1,4 +1,6 @@
 #include "ExecutorImpl.hpp"
+
+#include <memory>
 namespace adas
 {
 Executor* Executor::NewExecutor(const Pose& pose) noexcept
@@ -12,7 +14,17 @@ void ExecutorImpl::Execute(const std::string& commands) noexcept
 {
     for (const auto cmd : commands) {
         if (cmd == 'M') {
-            Move();
+            // Move();
+            std::unique_ptr<MoveCommand> cmder = std::make_unique<MoveCommand>();
+            cmder->DoOperate(*this);
+        } else if (cmd == 'L') {
+            // TurnLeft();
+            std::unique_ptr<TurnLeftCommand> cmder = std::make_unique<TurnLeftCommand>();
+            cmder->DoOperate(*this);
+        } else if (cmd == 'R') {
+            // TurnRight();
+            std::unique_ptr<TurnRightCommand> cmder = std::make_unique<TurnRightCommand>();
+            cmder->DoOperate(*this);
         }
     }
 }
@@ -26,6 +38,30 @@ void ExecutorImpl::Move() noexcept
         ++pose.y;
     } else if (pose.heading == 'S') {
         --pose.y;
+    }
+}
+void ExecutorImpl::TurnLeft() noexcept
+{
+    if (pose.heading == 'N') {
+        pose.heading = 'W';
+    } else if (pose.heading == 'W') {
+        pose.heading = 'S';
+    } else if (pose.heading == 'S') {
+        pose.heading = 'E';
+    } else if (pose.heading == 'E') {
+        pose.heading = 'N';
+    }
+}
+void ExecutorImpl::TurnRight() noexcept
+{
+    if (pose.heading == 'N') {
+        pose.heading = 'E';
+    } else if (pose.heading == 'E') {
+        pose.heading = 'S';
+    } else if (pose.heading == 'S') {
+        pose.heading = 'W';
+    } else if (pose.heading == 'W') {
+        pose.heading = 'N';
     }
 }
 Pose ExecutorImpl::Query() const noexcept

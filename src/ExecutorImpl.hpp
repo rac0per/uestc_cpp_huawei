@@ -16,6 +16,37 @@ public:
 
 private:
     Pose pose;
+
+    class MoveCommand final
+    {
+    public:
+        void DoOperate(ExecutorImpl& executor) const noexcept
+        {
+            executor.Move();
+        }
+    };
+    class TurnLeftCommand final
+    {
+    public:
+        void DoOperate(ExecutorImpl& executor) const noexcept
+        {
+            executor.TurnLeft();
+        }
+    };
+    class TurnRightCommand final
+    {
+    public:
+        void DoOperate(ExecutorImpl& executor) const noexcept
+        {
+            executor.TurnRight();
+        }
+    };
+    // Grant command helpers access to private movement methods
+    friend class MoveCommand;
+    friend class TurnLeftCommand;
+    friend class TurnRightCommand;
     void Move(void) noexcept;
+    void TurnLeft(void) noexcept;
+    void TurnRight(void) noexcept;
 };
 }  // namespace adas
