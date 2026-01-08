@@ -4,6 +4,7 @@
 #include <unordered_map>
 #include <algorithm>
 #include "CmderFactory.hpp"
+#include "Singleton.hpp"
 #include "Command.hpp"
 namespace adas
 {
@@ -17,8 +18,7 @@ ExecutorImpl::ExecutorImpl(const Pose& pose) noexcept : poseHandler(pose)
 
 void ExecutorImpl::Execute(const std::string& commands) noexcept
 {
-    CmderFactory cf;
-    const auto cmders = cf.GetCmders(commands);
+    const auto cmders = Singleton<CmderFactory>::Instance().GetCmders(commands);
     std::for_each(cmders.begin(), cmders.end(),
                   [this](const std::function<void(PoseHandler & poseHandler)>& cmder) noexcept { cmder(poseHandler); });
 }
