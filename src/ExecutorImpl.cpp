@@ -1,13 +1,15 @@
 #include "ExecutorImpl.hpp"
-#include "Command.hpp"
+
 #include <memory>
+
+#include "Command.hpp"
 namespace adas
 {
 Executor* Executor::NewExecutor(const Pose& pose) noexcept
 {
     return new (std::nothrow) ExecutorImpl(pose);
 }
-ExecutorImpl::ExecutorImpl(const Pose& pose) noexcept : pose(pose)
+ExecutorImpl::ExecutorImpl(const Pose& pose) noexcept : poseHandler(pose)
 {
 }
 void ExecutorImpl::Execute(const std::string& commands) noexcept
@@ -24,7 +26,7 @@ void ExecutorImpl::Execute(const std::string& commands) noexcept
             cmder = std::make_unique<FastCommand>();
         }
         if (cmder) {
-            cmder->DoOperate(*this);
+            cmder->DoOperate(poseHandler);
         }
     }
 }
@@ -66,7 +68,7 @@ void ExecutorImpl::TurnRight() noexcept
 }
 Pose ExecutorImpl::Query() const noexcept
 {
-    return pose;
+    return poseHandler.Query();
 }
 void ExecutorImpl::Fast() noexcept
 {

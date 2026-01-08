@@ -1,5 +1,6 @@
 #pragma once
 #include "Executor.hpp"
+#include "PoseHandler.hpp"
 namespace adas
 {
 class ExecutorImpl final : public Executor
@@ -23,5 +24,6 @@ public:
 private:
     Pose pose;
     bool fast{false};
+    PoseHandler poseHandler;
 };
 }  // namespace adas
